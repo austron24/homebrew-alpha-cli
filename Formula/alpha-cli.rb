@@ -10,9 +10,14 @@ class AlphaCli < Formula
   depends_on "python@3.11"
 
   def install
+    # Create virtualenv with pip
     venv = virtualenv_create(libexec, "python3.11")
-    # Install from PyPI to get all dependencies
-    system libexec/"bin/pip", "install", "--no-cache-dir", "alpha-cli==#{version}"
+
+    # Ensure pip is available and install from PyPI
+    system "#{libexec}/bin/python3.11", "-m", "ensurepip", "--upgrade"
+    system "#{libexec}/bin/python3.11", "-m", "pip", "install", "--upgrade", "pip"
+    system "#{libexec}/bin/python3.11", "-m", "pip", "install", "--no-cache-dir", "alpha-cli==#{version}"
+
     bin.install_symlink libexec/"bin/alpha"
   end
 
